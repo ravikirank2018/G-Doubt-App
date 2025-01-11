@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G-Doubt App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e8f0fe;
+            color: #333;
+            overflow-x: hidden;
+        }
+        header {
+            background-color: #3b5998;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            animation: fadeInDown 1s;
+        }
+        .container {
+            margin: 20px auto;
+            max-width: 800px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            animation: fadeInUp 1s;
+        }
+        .doubt-form {
+            margin-bottom: 20px;
+        }
+        .doubt-form input, .doubt-form textarea, .doubt-form select {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: box-shadow 0.3s;
+        }
+        .doubt-form input:focus, .doubt-form textarea:focus, .doubt-form select:focus {
+            box-shadow: 0 0 8px #3b5998;
+        }
+        .doubt-form button {
+            background-color: #3b5998;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .doubt-form button:hover {
+            background-color: #2d4373;
+        }
+        .doubt-form input[type="file"] {
+            padding: 5px;
+        }
+        .doubt-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .doubt-item {
+            background: #f9f9f9;
+            margin-bottom: 10px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            animation: fadeIn 0.5s;
+        }
+        .doubt-item .meta {
+            font-size: 0.9em;
+            color: #555;
+            margin-bottom: 8px;
+        }
+        .doubt-item .actions {
+            margin-top: 10px;
+        }
+        .doubt-item button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .doubt-item button:hover {
+            background-color: #45a049;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>G-Doubt App</h1>
+    </header>
+
+    <div class="container">
+        <section class="doubt-form">
+            <h2>Post a Doubt</h2>
+            <input type="text" id="regNo" placeholder="Enter your Registration Number">
+            <select id="course">
+                <option value="">Select Course</option>
+                <option value="course1">Course 1</option>
+                <option value="course2">Course 2</option>
+                <option value="course3">Course 3</option>
+            </select>
+            <select id="visibility">
+                <option value="">Select Visibility</option>
+                <option value="students">Visible to Students</option>
+                <option value="faculty">Visible to Faculty</option>
+                <option value="all">Visible to All</option>
+            </select>
+            <textarea id="doubtText" placeholder="Type your doubt here..."></textarea>
+            <input type="file" id="doubtImage" accept="image/*">
+            <button onclick="postDoubt()">Post</button>
+        </section>
+
+        <section class="doubt-list-section">
+            <h2>All Doubts</h2>
+            <ul class="doubt-list" id="doubtList">
+                <!-- Doubts will appear here -->
+            </ul>
+        </section>
+    </div>
+
+    <script>
+        function postDoubt() {
+            const regNo = document.getElementById('regNo').value;
+            const course = document.getElementById('course').value;
+            const visibility = document.getElementById('visibility').value;
+            const doubtText = document.getElementById('doubtText').value;
+            const doubtImage = document.getElementById('doubtImage').files[0];
+
+            if (!regNo || !course || !visibility || doubtText.trim() === '') {
+                alert('Please fill in all fields before posting.');
+                return;
+            }
+
+            const doubtList = document.getElementById('doubtList');
+
+            const listItem = document.createElement('li');
+            listItem.className = 'doubt-item';
+
+            const meta = document.createElement('div');
+            meta.className = 'meta';
+            meta.innerText = `Reg No: ${regNo} | Course: ${course} | Visibility: ${visibility} | Date: ${new Date().toLocaleString()}`;
+
+            const text = document.createElement('p');
+            text.innerText = doubtText;
+
+            const actions = document.createElement('div');
+            actions.className = 'actions';
+
+            const resolveButton = document.createElement('button');
+            resolveButton.innerText = 'Mark as Resolved';
+            resolveButton.onclick = function () {
+                listItem.style.textDecoration = 'line-through';
+                resolveButton.disabled = true;
+            };
+
+            actions.appendChild(resolveButton);
+
+            listItem.appendChild(meta);
+            listItem.appendChild(text);
+
+            if (doubtImage) {
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(doubtImage);
+                img.style.maxWidth = '100%';
+                img.style.marginTop = '10px';
+                img.style.borderRadius = '8px';
+                listItem.appendChild(img);
+            }
+
+            listItem.appendChild(actions);
+
+            doubtList.appendChild(listItem);
+
+            document.getElementById('regNo').value = '';
+            document.getElementById('course').value = '';
+            document.getElementById('visibility').value = '';
+            document.getElementById('doubtText').value = '';
+            document.getElementById('doubtImage').value = '';
+        }
+    </script>
+</body>
+</html>
