@@ -34,43 +34,35 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             animation: fadeInUp 1s;
         }
-        .doubt-form {
-            margin-bottom: 20px;
+        .login-section {
+            text-align: center;
         }
-        .doubt-form input, .doubt-form textarea, .doubt-form select {
-            width: 100%;
-            margin-bottom: 10px;
-            padding: 12px;
+        .login-section input {
+            margin: 10px;
+            padding: 10px;
+            width: 200px;
             border: 1px solid #ccc;
             border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 16px;
-            transition: box-shadow 0.3s;
         }
-        .doubt-form input:focus, .doubt-form textarea:focus, .doubt-form select:focus {
-            box-shadow: 0 0 8px #3b5998;
-        }
-        .doubt-form button {
+        .login-section button {
             background-color: #3b5998;
             color: white;
             border: none;
-            padding: 12px 20px;
+            padding: 10px 20px;
             border-radius: 8px;
-            font-size: 16px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            font-size: 16px;
         }
-        .doubt-form button:hover {
+        .login-section button:hover {
             background-color: #2d4373;
         }
-        .doubt-form input[type="file"] {
-            padding: 5px;
+        .teacher-dashboard, .student-dashboard {
+            display: none;
         }
-        .doubt-list {
-            list-style-type: none;
-            padding: 0;
+        .dashboard {
+            margin-top: 20px;
         }
-        .doubt-item {
+        .common-doubt {
             background: #f9f9f9;
             margin-bottom: 10px;
             padding: 15px;
@@ -78,25 +70,9 @@
             border-radius: 8px;
             animation: fadeIn 0.5s;
         }
-        .doubt-item .meta {
+        .common-doubt .meta {
             font-size: 0.9em;
             color: #555;
-            margin-bottom: 8px;
-        }
-        .doubt-item .actions {
-            margin-top: 10px;
-        }
-        .doubt-item button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 14px;
-            cursor: pointer;
-        }
-        .doubt-item button:hover {
-            background-color: #45a049;
         }
         @keyframes fadeIn {
             from { opacity: 0; }
@@ -118,93 +94,81 @@
     </header>
 
     <div class="container">
-        <section class="doubt-form">
-            <h2>Post a Doubt</h2>
-            <input type="text" id="regNo" placeholder="Enter your Registration Number">
-            <select id="course">
-                <option value="">Select Course</option>
-                <option value="course1">Course 1</option>
-                <option value="course2">Course 2</option>
-                <option value="course3">Course 3</option>
+        <section class="login-section" id="loginSection">
+            <h2>Login</h2>
+            <input type="text" id="username" placeholder="Enter Username">
+            <input type="password" id="password" placeholder="Enter Password">
+            <select id="role">
+                <option value="">Select Role</option>
+                <option value="student">Student</option>
+                <option value="teacher">Teacher</option>
             </select>
-            <select id="visibility">
-                <option value="">Select Visibility</option>
-                <option value="students">Visible to Students</option>
-                <option value="faculty">Visible to Faculty</option>
-                <option value="all">Visible to All</option>
-            </select>
-            <textarea id="doubtText" placeholder="Type your doubt here..."></textarea>
-            <input type="file" id="doubtImage" accept="image/*">
-            <button onclick="postDoubt()">Post</button>
+            <button onclick="login()">Login</button>
         </section>
 
-        <section class="doubt-list-section">
-            <h2>All Doubts</h2>
-            <ul class="doubt-list" id="doubtList">
-                <!-- Doubts will appear here -->
-            </ul>
+        <section class="student-dashboard dashboard" id="studentDashboard">
+            <h2>Student Dashboard</h2>
+            <button onclick="showDoubtForm()">Post a Doubt</button>
+            <div id="studentDoubtForm" style="display:none;">
+                <h3>Post a Doubt</h3>
+                <input type="text" id="regNo" placeholder="Enter your Registration Number">
+                <select id="course">
+                    <option value="">Select Course</option>
+                    <option value="course1">Course 1</option>
+                    <option value="course2">Course 2</option>
+                    <option value="course3">Course 3</option>
+                </select>
+                <textarea id="doubtText" placeholder="Type your doubt here..."></textarea>
+                <button onclick="postDoubt()">Submit Doubt</button>
+            </div>
+        </section>
+
+        <section class="teacher-dashboard dashboard" id="teacherDashboard">
+            <h2>Teacher Dashboard</h2>
+            <div id="courseDetails">
+                <h3>Mapped Courses</h3>
+                <ul>
+                    <li>Course 1: 10 Students with doubts</li>
+                    <li>Course 2: 5 Students with doubts</li>
+                </ul>
+                <h3>Most Common Doubts</h3>
+                <div class="common-doubt">
+                    <p>"How to solve problem X in Module Y?"</p>
+                    <div class="meta">Course: Course 1 | Module: Module Y</div>
+                </div>
+            </div>
         </section>
     </div>
 
     <script>
-        function postDoubt() {
-            const regNo = document.getElementById('regNo').value;
-            const course = document.getElementById('course').value;
-            const visibility = document.getElementById('visibility').value;
-            const doubtText = document.getElementById('doubtText').value;
-            const doubtImage = document.getElementById('doubtImage').files[0];
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const role = document.getElementById('role').value;
 
-            if (!regNo || !course || !visibility || doubtText.trim() === '') {
-                alert('Please fill in all fields before posting.');
+            if (!username || !password || !role) {
+                alert('Please fill in all fields.');
                 return;
             }
 
-            const doubtList = document.getElementById('doubtList');
+            document.getElementById('loginSection').style.display = 'none';
 
-            const listItem = document.createElement('li');
-            listItem.className = 'doubt-item';
-
-            const meta = document.createElement('div');
-            meta.className = 'meta';
-            meta.innerText = `Reg No: ${regNo} | Course: ${course} | Visibility: ${visibility} | Date: ${new Date().toLocaleString()}`;
-
-            const text = document.createElement('p');
-            text.innerText = doubtText;
-
-            const actions = document.createElement('div');
-            actions.className = 'actions';
-
-            const resolveButton = document.createElement('button');
-            resolveButton.innerText = 'Mark as Resolved';
-            resolveButton.onclick = function () {
-                listItem.style.textDecoration = 'line-through';
-                resolveButton.disabled = true;
-            };
-
-            actions.appendChild(resolveButton);
-
-            listItem.appendChild(meta);
-            listItem.appendChild(text);
-
-            if (doubtImage) {
-                const img = document.createElement('img');
-                img.src = URL.createObjectURL(doubtImage);
-                img.style.maxWidth = '100%';
-                img.style.marginTop = '10px';
-                img.style.borderRadius = '8px';
-                listItem.appendChild(img);
+            if (role === 'student') {
+                document.getElementById('studentDashboard').style.display = 'block';
+            } else if (role === 'teacher') {
+                document.getElementById('teacherDashboard').style.display = 'block';
             }
+        }
 
-            listItem.appendChild(actions);
+        function showDoubtForm() {
+            document.getElementById('studentDoubtForm').style.display = 'block';
+        }
 
-            doubtList.appendChild(listItem);
-
-            document.getElementById('regNo').value = '';
-            document.getElementById('course').value = '';
-            document.getElementById('visibility').value = '';
-            document.getElementById('doubtText').value = '';
-            document.getElementById('doubtImage').value = '';
+        function postDoubt() {
+            alert('Doubt posted successfully!');
+            document.getElementById('studentDoubtForm').style.display = 'none';
         }
     </script>
 </body>
 </html>
+
