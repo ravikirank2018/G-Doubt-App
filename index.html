@@ -6,15 +6,15 @@
     <title>G-Doubt App</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #e8f0fe;
+            background-color: #f5f7fa;
             color: #333;
             overflow-x: hidden;
         }
         header {
-            background-color: #3b5998;
+            background-color: #4A90E2;
             color: white;
             text-align: center;
             padding: 1rem;
@@ -37,30 +37,49 @@
         .login-section {
             text-align: center;
         }
-        .login-section input {
+        .login-section input, .login-section select {
             margin: 10px;
             padding: 10px;
-            width: 200px;
+            width: 220px;
             border: 1px solid #ccc;
             border-radius: 8px;
+            font-size: 14px;
         }
         .login-section button {
-            background-color: #3b5998;
+            background-color: #4A90E2;
             color: white;
             border: none;
             padding: 10px 20px;
             border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
+            transition: background-color 0.3s;
         }
         .login-section button:hover {
-            background-color: #2d4373;
+            background-color: #357ABD;
         }
         .teacher-dashboard, .student-dashboard {
             display: none;
         }
         .dashboard {
             margin-top: 20px;
+        }
+        .logout-button {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        .logout-button button {
+            background-color: #ff5c5c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        .logout-button button:hover {
+            background-color: #d9534f;
         }
         .common-doubt {
             background: #f9f9f9;
@@ -73,6 +92,33 @@
         .common-doubt .meta {
             font-size: 0.9em;
             color: #555;
+        }
+        .feature-section {
+            margin: 20px 0;
+            background: #e9f7ff;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            animation: fadeInUp 1s;
+        }
+        .feature-section h3 {
+            margin-top: 0;
+            color: #4A90E2;
+        }
+        .recent-activity {
+            margin-top: 20px;
+        }
+        .recent-activity ul {
+            list-style: none;
+            padding: 0;
+        }
+        .recent-activity ul li {
+            background: #f9f9f9;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s;
         }
         @keyframes fadeIn {
             from { opacity: 0; }
@@ -94,6 +140,25 @@
     </header>
 
     <div class="container">
+        <section class="feature-section">
+            <h3>Welcome to G-Doubt App</h3>
+            <p>Post your doubts and get them resolved by faculty or peers. Stay connected with your courses anytime!</p>
+            <ul>
+                <li>📘 Post doubts related to your courses.</li>
+                <li>👨‍🏫 Get guidance from your faculty.</li>
+                <li>📊 View the most common doubts and solutions.</li>
+            </ul>
+        </section>
+
+        <section class="recent-activity">
+            <h3>Recent Activity</h3>
+            <ul>
+                <li><strong>Student A:</strong> "Can someone explain topic X?"</li>
+                <li><strong>Student B:</strong> "What is the formula for Module Y?"</li>
+                <li><strong>Faculty:</strong> "Remember to check the updates for Course Z."</li>
+            </ul>
+        </section>
+
         <section class="login-section" id="loginSection">
             <h2>Login</h2>
             <input type="text" id="username" placeholder="Enter Username">
@@ -107,6 +172,9 @@
         </section>
 
         <section class="student-dashboard dashboard" id="studentDashboard">
+            <div class="logout-button">
+                <button onclick="logout()">Logout</button>
+            </div>
             <h2>Student Dashboard</h2>
             <button onclick="showDoubtForm()">Post a Doubt</button>
             <div id="studentDoubtForm" style="display:none;">
@@ -124,6 +192,9 @@
         </section>
 
         <section class="teacher-dashboard dashboard" id="teacherDashboard">
+            <div class="logout-button">
+                <button onclick="logout()">Logout</button>
+            </div>
             <h2>Teacher Dashboard</h2>
             <div id="courseDetails">
                 <h3>Mapped Courses</h3>
@@ -158,6 +229,12 @@
             } else if (role === 'teacher') {
                 document.getElementById('teacherDashboard').style.display = 'block';
             }
+        }
+
+        function logout() {
+            document.getElementById('studentDashboard').style.display = 'none';
+            document.getElementById('teacherDashboard').style.display = 'none';
+            document.getElementById('loginSection').style.display = 'block';
         }
 
         function showDoubtForm() {
