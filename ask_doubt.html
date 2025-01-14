@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask Doubt - G-Doubt App</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f3f4f6, #e3f2fd);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .doubt-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+        }
+        .doubt-container h2 {
+            color: #4CAF50;
+            margin-bottom: 1.5rem;
+        }
+        .doubt-container form {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+        }
+        .doubt-container select,
+        .doubt-container input,
+        .doubt-container textarea {
+            margin: 0.5rem 0;
+            padding: 0.8rem;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 100%;
+        }
+        .doubt-container button {
+            padding: 0.8rem;
+            margin-top: 1rem;
+            background: #4CAF50;
+            color: white;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .doubt-container button:hover {
+            background: #81C784;
+        }
+    </style>
+</head>
+<body>
+    <div class="doubt-container">
+        <h2>Ask a Doubt</h2>
+        <form action="#" method="POST" enctype="multipart/form-data">
+            <label for="course">Select Course:</label>
+            <select name="course" id="course" required>
+                <option value="">-- Select Course --</option>
+                <option value="course1">Course 1</option>
+                <option value="course2">Course 2</option>
+                <option value="course3">Course 3</option>
+            </select>
+
+            <label for="visibility">Set Visibility:</label>
+            <select name="visibility" id="visibility" required>
+                <option value="students">Visible to Students</option>
+                <option value="faculty">Visible to Faculty Only</option>
+                <option value="all">Visible to Everyone</option>
+            </select>
+
+            <label for="question">Your Doubt:</label>
+            <textarea name="question" id="question" rows="5" placeholder="Write your doubt here..." required></textarea>
+
+            <label for="image">Attach an Image (Optional):</label>
+            <input type="file" name="image" id="image" accept="image/*">
+
+            <button type="submit">Submit Doubt</button>
+        </form>
+    </div>
+</body>
+</html>
